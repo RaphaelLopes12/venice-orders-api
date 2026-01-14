@@ -30,7 +30,12 @@ public static class DependencyInjection
         {
             x.UsingRabbitMq((context, cfg) =>
             {
-                cfg.Host(configuration.GetConnectionString("RabbitMq"));
+                cfg.Host("rabbitmq", "/", h =>
+                {
+                    h.Username("guest");
+                    h.Password("guest");
+                });
+
                 cfg.ConfigureEndpoints(context);
             });
         });
