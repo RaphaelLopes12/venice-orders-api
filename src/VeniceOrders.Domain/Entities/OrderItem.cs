@@ -32,5 +32,21 @@ public class OrderItem
         PrecoUnitario = precoUnitario;
     }
 
+    /// <summary>
+    /// Reconstrói entidade a partir de dados persistidos
+    /// </summary>
+    public static OrderItem Reconstruct(Guid id, Guid orderId, string produto, int quantidade, decimal precoUnitario)
+    {
+        var item = new OrderItem
+        {
+            Id = id,
+            OrderId = orderId,
+            Produto = produto,
+            Quantidade = quantidade,
+            PrecoUnitario = precoUnitario
+        };
+        return item;
+    }
+
     public decimal Subtotal => Quantidade * PrecoUnitario;
 }
