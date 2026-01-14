@@ -16,6 +16,38 @@ A API estará disponível em: http://localhost:5000
 
 Swagger UI: http://localhost:5000
 
+---
+
+## Design Pattern Adotado
+
+### Padrão Arquitetural: Clean Architecture + CQRS
+
+**Escolhi a combinação de Clean Architecture com CQRS** como padrão principal do projeto.
+
+#### Justificativa da Escolha
+
+1. **Clean Architecture** foi escolhida porque:
+   - **Testabilidade**: As regras de negócio no Domain não dependem de frameworks externos, facilitando testes unitários
+   - **Independência de tecnologia**: Posso trocar SQL Server por PostgreSQL ou RabbitMQ por Kafka sem alterar o domínio
+   - **Manutenibilidade**: Código organizado em camadas com responsabilidades claras
+   - **Escalabilidade**: Cada camada pode evoluir independentemente
+
+2. **CQRS** foi escolhido porque:
+   - **Otimização separada**: Leituras (com cache Redis) e escritas (com eventos RabbitMQ) têm necessidades diferentes
+   - **Clareza de intenção**: Commands (`CreateOrderCommand`) e Queries (`GetOrderByIdQuery`) deixam explícito o que cada operação faz
+   - **Facilita Event Sourcing futuro**: A estrutura já está preparada para evoluir se necessário
+
+#### Outros Patterns Complementares
+
+| Pattern | Aplicação | Benefício |
+|---------|-----------|-----------|
+| **Repository** | `IOrderRepository`, `IOrderItemRepository` | Abstrai persistência, permite trocar banco sem impacto |
+| **Domain Events** | `OrderCreatedEvent` | Desacoplamento entre criação e notificação |
+| **Cache-Aside** | `GetOrderByIdQueryHandler` | Performance em leituras frequentes |
+| **Dependency Injection** | Todas as camadas | Baixo acoplamento, alta coesão |
+
+---
+
 ## Arquitetura
 
 ### Clean Architecture
